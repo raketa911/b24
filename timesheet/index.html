@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Табель за месяц — Bootstrap UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body { background: #f4f6f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .container-table { max-width: 900px; margin: 32px auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 24px; }
+    .card-block { border-radius: 8px; margin-bottom: 24px; }
+    .card-header { font-weight: 600; font-size: 1rem; }
+    .blue-header { background-color: #e0f7ff !important; }
+    .card-body { font-size: 0.95rem; }
+    .metric-value { font-size: 1.25rem; font-weight: 700; }
+    .tooltip-icon { cursor: pointer; }
+    .collapse-toggle { font-size: 0.875rem; cursor: pointer; }
+    .table-sm th, .table-sm td { padding: 0.5rem; }
+    .negative { color: #d33; }
+    .cursor-pointer { cursor: pointer; }
+    .tasks-table th, .tasks-table td { vertical-align: middle; }
+    /* Окно для ввода часов переработок на 6 символов */
+    .small-input {
+      width: 6ch;
+      border: 2px solid #0d6efd;
+      border-radius: 0.25rem;
+      background-color: #e0f7ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-table">
+    <h1 class="mb-4" id="table-title">Табель за Май 2025</h1>
+    <div class="mb-4">
+      <label for="month-select" class="form-label">Выберите месяц:</label>
+      <select id="month-select" class="form-select d-inline-block" style="width:200px;">
+        <option>Май 2025</option>
+        <option>Апрель 2025</option>
+        <option>Март 2025</option>
+      </select>
+    </div>
+
+    <!-- Рабочие часы -->
+    <div class="card card-block">
+      <div class="card-header blue-header d-flex justify-content-between align-items-center">
+        <span>
+          <span id="working-hours-label">Рабочие часы Май 2025</span>
+          <span data-bs-toggle="tooltip" title="Рабочих часов в месяце − (отпуск + отгул + больничный)" class="text-primary tooltip-icon">&#9432;</span>
+        </span>
+        <span id="total-working-hours" class="metric-value">112 ч.</span>
+      </div>
+      <div class="card-body">
+        <a class="collapse-toggle" data-bs-toggle="collapse" href="#collapseWorking" role="button" aria-expanded="false" aria-controls="collapseWorking">Подробнее</a>
+        <div class="collapse mt-2" id="collapseWorking">
+          <div class="table-responsive">
+            <table class="table table-sm" id="working-hours-table">
+              <thead class="table-light">
+                <tr><th>Название</th><th>Период</th><th>Часы</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="mt-3 text-muted" style="font-size:0.85rem;">Для корректного расчёта необходимо вовремя отражать отпуска, больничные и отгулы</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Часы по задачам -->
+    <div class="card card-block">
+      <div class="card-header blue-header d-flex justify-content-between align-items-center">
+        <span>Часы по задачам <span data-bs-toggle="tooltip" title="Сумма закоммиченного времени по задачам" class="text-primary tooltip-icon">&#9432;</span></span>
+        <span id="task-hours" class="metric-value">112 ч.</span>
+      </div>
+      <div class="card-body">
+        <a class="collapse-toggle" data-bs-toggle="collapse" href="#collapseTasks" role="button" aria-expanded="false" aria-controls="collapseTasks">Показать проекты</a>
+        <div class="collapse mt-2" id="collapseTasks">
+          <div class="table-responsive">
+            <table class="table table-sm" id="tasks-accordion">
+              <thead class="table-light">
+                <tr>
+                  <th style="width:2rem;"></th>
+                  <th>Клиент / Проект</th>
+                  <th>Часы</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="mt-3 text-muted" style="font-size:0.85rem;">Для корректного расчёта отразите все задачи и часы в Битриксе или трекере клиента.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end align-items-center my-3">
+      <span class="fw-bold me-2">Разница:</span>
+      <span id="hours-diff" class="metric-value text-danger">0 ч.</span>
+    </div>
+    <hr>
+
+    <div class="card card-block">
+      <div class="card-header">Баланс Отгулы/Отработки <span data-bs-toggle="tooltip" title="Переходящий остаток" class="text-primary tooltip-icon">&#9432;</span></div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between"><span><strong>Апрель:</strong></span><span id="prev-balance" class="fw-bold">0 ч.</span></div>
+        <div class="d-flex justify-content-between mt-2"><span><strong>Май:</strong></span><span id="curr-balance" class="fw-bold">0 ч.</span></div>
+      </div>
+    </div>
+
+    <!-- Оплачиваемые переработки -->
+    <div class="card card-block">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Оплачиваемые переработки <span data-bs-toggle="tooltip" title="Оплачиваемые часы сверх нормы" class="text-primary tooltip-icon">&#9432;</span></span>
+        <span id="paid-overtime-total" class="metric-value">0 ч.</span>
+      </div>
+      <div class="card-body">
+        <div id="overtime-container">
+          <p id="overtime-empty" class="text-muted d-none">Оплачиваемые переработки можно указать в блоке Часы по задачам</p>
+          <div class="table-responsive">
+            <table class="table table-sm" id="overtime-table">
+              <thead class="table-light"><tr><th>Задача</th><th>Часы</th><th>Комментарий</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-end mt-3">
+      <button class="btn btn-success me-2">Сохранить черновик</button>
+      <button class="btn btn-outline-primary">Отправить на согласование</button>
+    </div>
+  </div>
+
+  <!-- Модальное окно для ввода переработок -->
+  <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="taskModalLabel">Оплата переработки</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2"><strong>Клиент:</strong> <span id="modalClient"></span></div>
+          <div class="mb-2"><strong>Проект:</strong> <span id="modalProject"></span></div>
+          <div class="mb-3"><strong>Задача:</strong> <span id="modalTask"></span></div>
+          <div class="mb-3 form-group">
+            <label for="modalHours" class="form-label">Часы переработки</label>
+            <input type="number" id="modalHours" class="form-control small-input" min="0" maxlength="3">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="modalComment" class="form-label">Комментарий</label>
+            <textarea id="modalComment" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <button type="button" class="btn btn-primary" id="modalSave">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap & Script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+
+    const monthSelect = document.getElementById('month-select');
+    let currentMonth = '';
+    let expandedProjects = new Set();  // храним открытые проекты
+
+    const dataStatic = {
+      'Май 2025': {
+        monthLabel:'Май 2025', calendarHours:168, totalWorking:112, taskHours:112, absenceDayoff:8, prevBalance:0,
+        workingDetails:[
+          {name:'По Производственному календарю',period:'Май 2025',hours:168,negative:false},
+          {name:'Отпуск',period:'10.05.2025 — 13.05.2025',hours:32,negative:true},
+          {name:'Отгул',period:'20.05.2025',hours:8,negative:true},
+          {name:'Больничный',period:'15.05.2025 — 16.05.2025',hours:16,negative:true}
+        ],
+        tasksDetails: [
+          {client:'Клиент A', project:'Проект Alpha', hours:20, tasks:[
+            {name:'Задача A1', hours:8}, {name:'Задача A2', hours:12}
+          ]},
+          {client:'Клиент B', project:'Проект Beta', hours:35, tasks:[
+            {name:'Задача B1', hours:15}, {name:'Задача B2', hours:20}
+          ]},
+          {client:'Клиент C', project:'Проект Gamma', hours:15, tasks:[
+            {name:'Задача C1', hours:5}, {name:'Задача C2', hours:10}
+          ]},
+          {client:'Клиент D', project:'Проект Delta', hours:42, tasks:[
+            {name:'Задача D1', hours:22}, {name:'Задача D2', hours:20}
+          ]}
+        ]
+      },
+      'Апрель 2025': {
+        monthLabel:'Апрель 2025', calendarHours:160, totalWorking:120, taskHours:110, absenceDayoff:0, prevBalance:5,
+        workingDetails:[
+          {name:'По Производственному календарю',period:'Апрель 2025',hours:160,negative:false},
+          {name:'Больничный',period:'05.04.2025 — 06.04.2025',hours:16,negative:true}
+        ],
+        tasksDetails: []
+      },
+      'Март 2025': {
+        monthLabel:'Март 2025', calendarHours:168, totalWorking:104, taskHours:100, absenceDayoff:4, prevBalance:2,
+        workingDetails:[{name:'По Производственному календарю',period:'Март 2025',hours:168,negative:false}],
+        tasksDetails: []
+      }
+    };
+    let overtimeEntries = [];
+
+    function renderWorkingDetails(details) {
+      const tbody = document.querySelector('#working-hours-table tbody');
+      tbody.innerHTML = '';
+      details.forEach(d => {
+        const tr = document.createElement('tr');
+        const hrs = (d.negative ? '-' : '') + d.hours + ' ч.';
+        tr.innerHTML = `<td>${d.name}</td><td>${d.period}</td><td class="${d.negative?'negative':''}">${hrs}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function overtimeExistsFor(taskName) {
+      return overtimeEntries.some(ent => ent.task === taskName && ent.hours > 0);
+    }
+
+    function getOvertimeFor(taskName) {
+      const ent = overtimeEntries.find(ent => ent.task === taskName);
+      return ent ? ent.hours : 0;
+    }
+
+    function renderTasks() {
+      const tbody = document.querySelector('#tasks-accordion tbody');
+      tbody.innerHTML = '';
+      const projects = dataStatic[currentMonth].tasksDetails;
+
+      projects.forEach(({client, project, hours, tasks}) => {
+        const projId = 'proj-' + project.replace(/\s+/g,'');
+        // Строка проекта (без лишнего столбца)
+        const trProj = document.createElement('tr');
+        trProj.classList.add('cursor-pointer');
+        trProj.setAttribute('data-bs-toggle','collapse');
+        trProj.setAttribute('data-bs-target','#'+projId);
+        trProj.innerHTML = `
+          <td><i class="bi bi-caret-right-fill"></i></td>
+          <td>${client} / ${project}</td>
+          <td>${hours} ч.</td>
+        `;
+        tbody.appendChild(trProj);
+
+        // Детали задач
+        const trTasks = document.createElement('tr');
+        trTasks.id = projId;
+        // добавляем collapse и, если ранее был открыт, класс show
+        trTasks.className = expandedProjects.has(projId) ? 'collapse show' : 'collapse';
+
+        const td = document.createElement('td');
+        td.setAttribute('colspan','3');
+        let inner = `<table class="table table-sm mb-0 tasks-table"><thead><tr><th>Задача</th><th>Часы</th></tr></thead><tbody>`;
+        tasks.forEach(task => {
+          const extra = overtimeExistsFor(task.name) ? ` (extra ${getOvertimeFor(task.name)}ч)` : '';
+          inner += `
+            <tr class="cursor-pointer task-row"
+                data-client="${client}"
+                data-project="${project}"
+                data-task="${task.name}"
+                data-hours="${task.hours}">
+              <td><i class="bi bi-cash-stack ${overtimeExistsFor(task.name)?'text-success':'text-secondary'} me-1" title="Оплачиваемые переработки"></i>${task.name}</td>
+              <td>${task.hours} ч.${extra}</td>
+            </tr>`;
+        });
+        inner += '</tbody></table>';
+        td.innerHTML = inner;
+        trTasks.appendChild(td);
+        tbody.appendChild(trTasks);
+      });
+
+      // Навешиваем слушатели на открытие/закрытие collapse
+      document.querySelectorAll('#tasks-accordion .collapse').forEach(collapseEl => {
+        collapseEl.addEventListener('show.bs.collapse', e => expandedProjects.add(e.target.id));
+        collapseEl.addEventListener('hide.bs.collapse', e => expandedProjects.delete(e.target.id));
+      });
+
+      attachTaskListeners();
+    }
+
+    function attachTaskListeners() {
+      document.querySelectorAll('.task-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const client = row.dataset.client;
+          const project = row.dataset.project;
+          const task = row.dataset.task;
+          const existing = overtimeEntries.find(ent => ent.task === task);
+          document.getElementById('modalClient').textContent = client;
+          document.getElementById('modalProject').textContent = project;
+          document.getElementById('modalTask').textContent = task;
+          document.getElementById('modalHours').value = existing ? existing.hours : '';
+          document.getElementById('modalComment').value = existing ? existing.comment : '';
+          new bootstrap.Modal(document.getElementById('taskModal')).show();
+        });
+      });
+    }
+
+    document.getElementById('modalSave').addEventListener('click', () => {
+      const task = document.getElementById('modalTask').textContent;
+      const hoursVal = parseFloat(document.getElementById('modalHours').value) || 0;
+      const commentVal = document.getElementById('modalComment').value;
+      const idx = overtimeEntries.findIndex(ent => ent.task === task);
+      if (hoursVal > 0) {
+        if (idx >= 0) {
+          overtimeEntries[idx].hours = hoursVal;
+          overtimeEntries[idx].comment = commentVal;
+        } else {
+          overtimeEntries.push({ task, hours: hoursVal, comment: commentVal });
+        }
+      } else if (idx >= 0) {
+        overtimeEntries.splice(idx,1);
+      }
+      renderOvertimeTable();
+      bootstrap.Modal.getInstance(document.getElementById('taskModal')).hide();
+      renderTasks();  // при повторной отрисовке состояние collapse сохраняется
+    });
+
+    function renderOvertimeTable() {
+      const emptyMsg = document.getElementById('overtime-empty');
+      const table = document.getElementById('overtime-table');
+      const tableResp = table.closest('.table-responsive');
+      if (overtimeEntries.length === 0) {
+        emptyMsg.classList.remove('d-none');
+        tableResp.classList.add('d-none');
+        document.getElementById('paid-overtime-total').textContent = '0 ч.';
+      } else {
+        emptyMsg.classList.add('d-none');
+        tableResp.classList.remove('d-none');
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';
+        let total = 0;
+        overtimeEntries.forEach(ent => {
+          total += ent.hours;
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${ent.task}</td><td>${ent.hours} ч.</td><td>${ent.comment || ''}</td>`;
+          tbody.appendChild(tr);
+        });
+        document.getElementById('paid-overtime-total').textContent = total + ' ч.';
+      }
+    }
+
+    monthSelect.addEventListener('change', () => {
+      currentMonth = monthSelect.value;
+      const d = dataStatic[currentMonth];
+      document.getElementById('table-title').textContent = 'Табель за ' + currentMonth;
+      document.getElementById('working-hours-label').textContent = 'Рабочие часы ' + currentMonth;
+      document.getElementById('total-working-hours').textContent = d.totalWorking + ' ч.';
+      document.getElementById('task-hours').textContent = d.taskHours + ' ч.';
+      document.getElementById('prev-balance').textContent = d.prevBalance + ' ч.';
+      const diff = d.totalWorking - d.taskHours;
+      document.getElementById('hours-diff').textContent = diff + ' ч.';
+      const curr = diff + d.prevBalance - d.absenceDayoff;
+      document.getElementById('curr-balance').textContent = curr + ' ч.';
+      overtimeEntries = [];
+      expandedProjects.clear();  // сброс состояния при смене месяца
+      renderWorkingDetails(d.workingDetails);
+      renderTasks();
+      renderOvertimeTable();
+    });
+
+    window.onload = () => { monthSelect.dispatchEvent(new Event('change')); };
+  </script>
+</body>
+</html>

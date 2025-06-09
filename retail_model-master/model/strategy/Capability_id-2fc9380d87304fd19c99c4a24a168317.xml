@@ -1,0 +1,5 @@
+<archimate:Capability
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Управление товарным запасом"
+    id="id-2fc9380d87304fd19c99c4a24a168317"
+    documentation="Способность контроля и оптимизации уровня запасов товаров на складах и в торговых точках с целью обеспечения бесперебойной работы бизнеса и минимизации затрат на хранение. &#xD;&#xA;&#xD;&#xA;&#xD;&#xA;Включает в себя способности:&#xD;&#xA;&#xD;&#xA;Demand Forecasting - Прогнозирование спроса&#xD;&#xA;&#xD;&#xA;Merchandise Allocation Planning - Планирование распределения товарных запасов&#xD;&#xA;&#xD;&#xA;Merchandise Allocation Execution - Исполнение распределения товарных запасов"/>

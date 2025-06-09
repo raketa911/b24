@@ -1,0 +1,11 @@
+<archimate:CompositionRelationship
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    id="id-96dcdeda4d3e4d93830e23ad4751608c">
+  <source
+      xsi:type="archimate:Capability"
+      href="Capability_id-0beb54320bac424f9d983473a627e98e.xml#id-0beb54320bac424f9d983473a627e98e"/>
+  <target
+      xsi:type="archimate:Capability"
+      href="Capability_id-b5a9125a8b6a4787b369af0ddaf91634.xml#id-b5a9125a8b6a4787b369af0ddaf91634"/>
+</archimate:CompositionRelationship>

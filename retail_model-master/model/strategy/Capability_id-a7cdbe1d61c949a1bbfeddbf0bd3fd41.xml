@@ -1,0 +1,5 @@
+<archimate:Capability
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Управление складской логистикой"
+    id="id-a7cdbe1d61c949a1bbfeddbf0bd3fd41"
+    documentation="Способность организации, планирования, контроля и выполнения операций по приемке, хранению, отгрузке товаров на складе.&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;Включает в себя способности:&#xD;&#xA;&#xD;&#xA;Merchandise Flow Strategy - Стратегическое управление движением товаров&#xD;&#xA;&#xD;&#xA;Управление запасами (Inventory Management) &#xD;&#xA;&#xD;&#xA;Учет запасов на складе (Stock Ledger)&#xD;&#xA;&#xD;&#xA;Extended Warehouse Management - Расширенное управление складом&#xD;&#xA;&#xD;&#xA;Dock Appointment Scheduling - Планирование приёма и отправки на погрузочных станциях&#xD;&#xA;&#xD;&#xA;Goods Receipts - Приём товаров&#xD;&#xA;&#xD;&#xA;Goods Issue - Выдача товаров&#xD;&#xA;&#xD;&#xA;Item Serialization and Product Traceability - Сериализация изделий и отслеживание происхождения продукции&#xD;&#xA;&#xD;&#xA;Yard and Hub logistics - Управление площадкой и логистика хабов (центров сортировки и перераспределения грузов)"/>

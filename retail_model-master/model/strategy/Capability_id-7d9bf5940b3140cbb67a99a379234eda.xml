@@ -1,0 +1,5 @@
+<archimate:Capability
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Управление выкладкой"
+    id="id-7d9bf5940b3140cbb67a99a379234eda"
+    documentation="Обеспечение выкладки в соответсвии с планограммами&#xD;&#xA;&#xD;&#xA;Ротация товара на полке по срокам годности&#xD;&#xA;&#xD;&#xA;Инициирование дозаказа товара при нехватке&#xD;&#xA;&#xD;&#xA;Размещение POS-материалов в торговых точках&#xD;&#xA;&#xD;&#xA;Контроль выкладки"/>

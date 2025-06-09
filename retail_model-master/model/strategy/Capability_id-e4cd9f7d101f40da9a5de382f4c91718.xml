@@ -1,0 +1,5 @@
+<archimate:Capability
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Омниканальное Управление Заказами"
+    id="id-e4cd9f7d101f40da9a5de382f4c91718"
+    documentation="Способность управления процессами приема, обработки и выполнения заказов таким образом, чтобы обеспечить бесшовную интеграцию и эффективную координацию между всеми каналами продаж и точками контакта с клиентом.&#xD;&#xA;&#xD;&#xA;Содержит в себе способности:&#xD;&#xA;&#xD;&#xA;Omnichannel Inventory Visibility - Омниканальная видимость инвентаря&#xD;&#xA;&#xD;&#xA;Order Sourcing and Product Availability - Источники заказа и наличие товара&#xD;&#xA;&#xD;&#xA;Advanced Order Promising/ATP - Продвинутое обещание заказа / ATP&#xD;&#xA;&#xD;&#xA;Claims, Returns and Refunds Management - Управление претензиями, возвратами и возвратами средств&#xD;&#xA;&#xD;&#xA;Billing and Invoicing - Выставление счетов и инвойсинг&#xD;&#xA;&#xD;&#xA;Sales Order Management and Processing - Управление и обработка заказов на продажу&#xD;&#xA;&#xD;&#xA;Omnichannel Price and Promotional Offer Execution - Реализация омниканальных цен и промоакций&#xD;&#xA;&#xD;&#xA;.&#xD;&#xA;"/>

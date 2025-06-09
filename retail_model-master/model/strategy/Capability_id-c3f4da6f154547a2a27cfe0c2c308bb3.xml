@@ -1,0 +1,5 @@
+<archimate:Capability
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Управление транспортной логистикой"
+    id="id-c3f4da6f154547a2a27cfe0c2c308bb3"
+    documentation="Способность организации, планирования, контроля и выполнения операций по перевозке товаров от производителя до конечной торговой точки.&#xD;&#xA;&#xD;&#xA;Включает в себя способности:&#xD;&#xA;&#xD;&#xA;Strategic Freight Management - Стратегическое управление грузоперевозками&#xD;&#xA;&#xD;&#xA;Transportation Requirements Management - Управление требованиями к транспортировке&#xD;&#xA;&#xD;&#xA;Freight Planning and Optimization - Планирование грузоперевозок и их оптимизация&#xD;&#xA;&#xD;&#xA;Freight Tendering - Организация тендера на грузоперевозки&#xD;&#xA;&#xD;&#xA;Basic Shipping - Основные услуги по доставке&#xD;&#xA;&#xD;&#xA;Transportation Execution and Monitoring - Осуществление и мониторинг транспортировки&#xD;&#xA;&#xD;&#xA;Freight and Forwarding Settlement - Расчёты за грузоперевозки и экспедирование&#xD;&#xA;&#xD;&#xA;Carrier Booking - Бронирование перевозчика"/>
